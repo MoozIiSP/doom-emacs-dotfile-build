@@ -21,7 +21,7 @@ jobs:
       - run: ls $HOME
       - name: configure ~/.emacs.d/bin/doom
         run: |
-          $env:Path="$HOME\.emacs.d\bin;$env:Path";
+          $env:Path="${{ github.workspace }}\emacs-bin\bin;$HOME\.emacs.d\bin;$env:Path";
           & doom install
       - run: doom help
       - name: packaging
