@@ -5,8 +5,8 @@ jobs:
   emacs-dotfile-build:
     runs-on: windows-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
+      # - name: Check out repository code
+      #   uses: actions/checkout@v3
       - name: Download Emacs binary and uncompress it.
         run: |
           curl -LO https://github.com/kiennq/emacs-build/releases/download/v30.172.20230101.8aae5fb/emacs-master-x86_64-full.zip;
@@ -16,7 +16,7 @@ jobs:
       - name: Clone my doom emacs configuration
         run: |
           git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d;
-          git clone --depth 1 https://github.com/MoozIiSP/doom-emacs-private ~/.doom.d;
+          git clone https://github.com/MoozIiSP/doom-emacs-private ~/.doom.d;
       - name: configure ~/.emacs.d/bin/doom
         run: ~/.emacs.d/bin/doom install
       - name: packaging
