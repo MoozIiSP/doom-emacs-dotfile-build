@@ -18,12 +18,13 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/doomemacs/doomemacs.git $HOME\.emacs.d;
           git clone https://github.com/MoozIiSP/doom-emacs-private.git $HOME\.doom.d;
+        run: ls $HOME
       - name: configure ~/.emacs.d/bin/doom
         run: |
           & $HOME\.emacs.d\bin\doom install
       - name: packaging
         run: |
-          tar czf doomemacs-dotfiles-cache.tgz $HOME\.emacs.d\ $HOME\.doom.d\
+          tar czf doomemacs-dotfiles-cache.tgz $HOME\.emacs.d $HOME\.doom.d
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
