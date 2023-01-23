@@ -13,7 +13,8 @@ jobs:
           unzip emacs-master-x86_64-full.zip -d emacs-bin;
       - name: Fetch Emacs version
         run: |
-          $env:Path="${{ github.workspace }}\emacs-bin\bin;$env:Path" & echo $(& ${{ github.workspace }}\emacs-bin\bin\emacs.exe --version)
+          $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
+          echo $(& emacs.exe --version);
       - name: Clone my doom emacs configuration
         run: |
           git clone --depth 1 https://github.com/doomemacs/doomemacs.git $HOME\.emacs.d;
@@ -21,7 +22,7 @@ jobs:
       - run: ls $HOME
       - name: configure ~/.emacs.d/bin/doom
         run: |
-          $env:Path="${{ github.workspace }}\emacs-bin\bin;$HOME\.emacs.d\bin;$env:Path";
+          $Env:Path += ";$HOME\.emacs.d\bin";
           & doom install
       - run: doom help
       - name: packaging
