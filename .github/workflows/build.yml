@@ -16,14 +16,14 @@ jobs:
           $env:Path="${{ github.workspace }}\emacs-bin\bin;$env:Path" & echo $(& ${{ github.workspace }}\emacs-bin\bin\emacs.exe --version)
       - name: Clone my doom emacs configuration
         run: |
-          git clone --depth 1 https://github.com/doomemacs/doomemacs.git ~/.emacs.d;
-          git clone https://github.com/MoozIiSP/doom-emacs-private.git ~/.doom.d;
+          git clone --depth 1 https://github.com/doomemacs/doomemacs.git $HOME\.emacs.d;
+          git clone https://github.com/MoozIiSP/doom-emacs-private.git $HOME\.doom.d;
       - name: configure ~/.emacs.d/bin/doom
         run: |
-          & ~\.emacs.d\bin\doom install
+          & $HOME\.emacs.d\bin\doom install
       - name: packaging
         run: |
-          tar czf doomemacs-dotfiles-cache.tgz ~\.emacs.d\ ~\.doom.d\
+          tar czf doomemacs-dotfiles-cache.tgz $HOME\.emacs.d\ $HOME\.doom.d\
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
