@@ -18,7 +18,8 @@ jobs:
           git clone --depth 1 https://github.com/doomemacs/doomemacs.git ~/.emacs.d;
           git clone https://github.com/MoozIiSP/doom-emacs-private.git ~/.doom.d;
       - name: configure ~/.emacs.d/bin/doom
-        run: ~/.emacs.d/bin/doom install
+        run: |
+          & ~/.emacs.d/bin/doom install
       - name: packaging
         run: |
           tar czf doomemacs-dotfiles-cache.tgz ~/.emacs.d/ ~/.doom.d/
