@@ -12,14 +12,15 @@ jobs:
           curl -LO https://github.com/kiennq/emacs-build/releases/download/v30.172.20230101.8aae5fb/emacs-master-x86_64-full.zip;
           unzip emacs-master-x86_64-full.zip -d emacs-bin;
       - name: Fetch Emacs version
-        run: $env:Path="${{ github.workspace }}\emacs-bin\bin;$env:Path" & echo $(& ${{ github.workspace }}\emacs-bin\bin\emacs.exe --version)
+        run: |
+          $env:Path="${{ github.workspace }}\emacs-bin\bin;$env:Path" & echo $(& ${{ github.workspace }}\emacs-bin\bin\emacs.exe --version)
       - name: Clone my doom emacs configuration
         run: |
           git clone --depth 1 https://github.com/doomemacs/doomemacs.git ~/.emacs.d;
           git clone https://github.com/MoozIiSP/doom-emacs-private.git ~/.doom.d;
       - name: configure ~/.emacs.d/bin/doom
         run: |
-          & ~/.emacs.d/bin/doom install
+          & ~\.emacs.d\bin\doom install
       - name: packaging
         run: |
           tar czf doomemacs-dotfiles-cache.tgz ~/.emacs.d/ ~/.doom.d/
