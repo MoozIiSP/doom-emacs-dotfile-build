@@ -23,7 +23,7 @@ jobs:
           & ~\.emacs.d\bin\doom install
       - name: packaging
         run: |
-          tar czf doomemacs-dotfiles-cache.tgz ~/.emacs.d/ ~/.doom.d/
+          tar czf doomemacs-dotfiles-cache.tgz ~\.emacs.d\ ~\.doom.d\
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
