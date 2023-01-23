@@ -19,7 +19,7 @@ jobs:
       #- run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       #- run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: Fetch Emacs version
-        run: $env:Path="$pwd\emacs-x86_64-full\bin;$env:Path" & echo $(emacs.exe --version)
+        run: $env:Path="${{ github.workspace }}\emacs-x86_64-full\bin;$env:Path" & echo $(emacs.exe --version)
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
