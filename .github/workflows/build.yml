@@ -14,7 +14,7 @@ jobs:
       - name: Fetch Emacs version
         run: |
           $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
-          echo $(& emacs.exe --version);
+          echo $(& emacs --version);
       - name: Clone my doom emacs configuration
         run: |
           git clone --depth 1 https://github.com/doomemacs/doomemacs.git $HOME\.emacs.d;
@@ -23,6 +23,7 @@ jobs:
       - run: echo $env.Path
       - name: configure ~/.emacs.d/bin/doom
         run: |
+          $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
           $Env:Path += ";$HOME\.emacs.d\bin";
           & doom install
       - run: doom help
