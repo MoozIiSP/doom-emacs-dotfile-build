@@ -11,6 +11,7 @@ jobs:
         run: |
           curl -LO https://github.com/kiennq/emacs-build/releases/download/v30.172.20230101.8aae5fb/emacs-master-x86_64-full.zip;
           unzip emacs-master-x86_64-full.zip -d emacs-bin;
+      - run: ${{ github.workspace }}\emacs-bin\bin\emacs.exe --version
       - name: Fetch Emacs version
         run: $env:Path="${{ github.workspace }}\emacs-bin\bin;$env:Path" & echo $(& emacs.exe --version)
       - name: List files in the repository
