@@ -15,7 +15,8 @@ jobs:
           mkdir emacs-x86_64-full & mv emacs-master-x86_64-full.zip ${{ github.workspace }}\emacs-x86_64-full\
       - name: list
         run: |
-          ls . & ls emacs-x86_64-full
+          ls .
+      - run: ls emacs-x86_64-full
       - name: unzip
         run: cd emacs-x86_64-full & unzip emacs-master-x86_64-full.zip
       #- run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
