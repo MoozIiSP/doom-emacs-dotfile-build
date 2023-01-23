@@ -26,8 +26,12 @@ jobs:
           & doom install --no-env;
       - name: packaging
         run: |
-          tar czf doomemacs-dotfiles-cache.tgz $HOME\.emacs.d $HOME\.doom.d
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
+          cd $HOME;
+          tar czf doomemacs-dotfiles-cache.tgz .emacs.d .doom.d;
+          mv doomemacs-dotfiles-cache.tgz ${{ github.workspace }}\doomemacs-dotfiles-cache.tgz;
+      - name: Upload doomemacs-dotfiles-cache.tgz
+        uses: actions/upload-artifact@v3
+        with:
+          name: doomemacs-dotfiles
+          path: ${{ github.workspace }}\doomemacs-dotfiles-cache.tgz
       - run: echo "🍏 This job's status is ${{ job.status }}."
