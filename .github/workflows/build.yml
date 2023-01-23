@@ -41,8 +41,8 @@ jobs:
           name: doomemacs-dotfiles
           allowUpdates: true
           prerelease: false
-      #    tag: ${{ env.latest_release }}
-      #    commit: 22.03
+          tag: 30.0.50
+        #  commit: 
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: doomemacs-dotfiles-cache.tgz
