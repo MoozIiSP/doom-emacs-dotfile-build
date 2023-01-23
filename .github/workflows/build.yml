@@ -20,6 +20,7 @@ jobs:
           git clone --depth 1 https://github.com/doomemacs/doomemacs.git $HOME\.emacs.d;
           git clone https://github.com/MoozIiSP/doom-emacs-private.git $HOME\.doom.d;
       - run: ls $HOME
+      - run: echo $env.Path
       - name: configure ~/.emacs.d/bin/doom
         run: |
           $Env:Path += ";$HOME\.emacs.d\bin";
