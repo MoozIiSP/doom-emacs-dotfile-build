@@ -12,7 +12,9 @@ jobs:
           curl -LO https://github.com/kiennq/emacs-build/releases/download/v30.172.20230101.8aae5fb/emacs-master-x86_64-full.zip;
       - name: Extract all files to emacs-x86_64-full
         run: |
-          mkdir emacs-x86_64-full & mv emacs-master-x86_64-full.zip emacs-x86_64-full/ & cd emacs-x86_64-full & unzip emacs-master-x86_64-full.zip
+          mkdir emacs-x86_64-full & mv emacs-master-x86_64-full.zip emacs-x86_64-full/emacs-master-x86_64-full.zip
+      - name: unzip
+        run: cd emacs-x86_64-full & unzip emacs-master-x86_64-full.zip
       - name: list
         run: |
           ls . & ls emacs-x86_64-full
