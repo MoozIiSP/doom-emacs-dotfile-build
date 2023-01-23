@@ -21,7 +21,9 @@ jobs:
       - run: ls $HOME
       - name: configure ~/.emacs.d/bin/doom
         run: |
-          & $HOME\.emacs.d\bin\doom install
+          $env:Path="$HOME\.emacs.d\bin;$env:Path";
+          & doom install
+      - run: doom help
       - name: packaging
         run: |
           tar czf doomemacs-dotfiles-cache.tgz $HOME\.emacs.d $HOME\.doom.d
