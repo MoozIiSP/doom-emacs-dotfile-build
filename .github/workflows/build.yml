@@ -23,8 +23,7 @@ jobs:
         run: |
           $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
           $Env:Path += ";$HOME\.emacs.d\bin";
-          & doom env;
-          & doom install -y;
+          & doom install --no-env;
       - name: packaging
         run: |
           tar czf doomemacs-dotfiles-cache.tgz $HOME\.emacs.d $HOME\.doom.d
