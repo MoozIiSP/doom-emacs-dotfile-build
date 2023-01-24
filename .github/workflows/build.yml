@@ -48,6 +48,6 @@ jobs:
           tag: 30.0.50
         #  commit: 
           replacesArtifacts: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           artifacts: doomemacs-dotfiles-cache.tgz
       - run: echo "🍏 This job's status is ${{ job.status }}."
