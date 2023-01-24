@@ -1,6 +1,10 @@
 name: Emacs on windows dotfile building
-run-name: ${{ github.actor }} is build and packaging Emacs dotfiles 🚀
+#run-name: ${{ github.actor }} is build and packaging Emacs dotfiles 🚀
 on: [push]
+
+permissions:
+  contents: read
+
 jobs:
   emacs-dotfile-build:
     runs-on: windows-latest
