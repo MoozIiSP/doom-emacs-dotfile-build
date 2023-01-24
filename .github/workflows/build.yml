@@ -30,11 +30,9 @@ jobs:
           # packaging
           cd $HOME;
           tar czf doomemacs-dotfiles.tgz .emacs.d .doom.d;
-          mv doomemacs-dotfiles.tgz ${{ github.workspace }}\doomemacs-dotfiles.tgz;
           # upload artifact
-          cd ${{ github.workspace }}
-          rm -r .\artifact
-          mkdir -p .\artifact
+          mkdir -p ${{ github.workspace }}\artifact
+          mv doomemacs-dotfiles.tgz ${{ github.workspace }}\artifact\;
       - name: Upload doomemacs-dotfiles.tgz
         uses: actions/upload-artifact@v3
         with:
