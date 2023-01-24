@@ -24,7 +24,7 @@ jobs:
         run: |
           $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
           $Env:Path += ";$HOME\.emacs.d\bin";
-          & doom install --force --doomdir="$HOME\.doom.d";
+          & doom install --force;
       - name: List all modules
         run: |
           ls $HOME\.emacs.d\.local\straight\repos;
