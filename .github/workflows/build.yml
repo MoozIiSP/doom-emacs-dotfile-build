@@ -33,7 +33,7 @@ jobs:
           mv doomemacs-dotfiles.tgz ${{ github.workspace }}\doomemacs-dotfiles.tgz;
           # upload artifact
           cd ${{ github.workspace }}
-          rm -rf .\artifact
+          rm -r .\artifact
           mkdir -p .\artifact
       - name: Upload doomemacs-dotfiles.tgz
         uses: actions/upload-artifact@v3
