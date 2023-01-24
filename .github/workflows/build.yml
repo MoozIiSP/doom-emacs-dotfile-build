@@ -6,16 +6,16 @@ jobs:
   emacs-dotfile-build:
     runs-on: windows-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - name: Download Emacs binary and uncompress it.
-        run: |
-          curl -LO https://github.com/kiennq/emacs-build/releases/download/v30.172.20230101.8aae5fb/emacs-master-x86_64-full.zip;
-          unzip emacs-master-x86_64-full.zip -d emacs-bin;
-      - name: Fetch Emacs version
-        run: |
-          $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
-          echo $(& emacs --version);
+      # - name: Check out repository code
+      #   uses: actions/checkout@v3
+      # - name: Download Emacs binary and uncompress it.
+      #   run: |
+      #     curl -LO https://github.com/kiennq/emacs-build/releases/download/v30.172.20230101.8aae5fb/emacs-master-x86_64-full.zip;
+      #     unzip emacs-master-x86_64-full.zip -d emacs-bin;
+      # - name: Fetch Emacs version
+      #   run: |
+      #     $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
+      #     echo $(& emacs --version);
       - name: Clone my doom emacs configuration
         run: |
           git clone --depth 1 https://github.com/doomemacs/doomemacs.git $HOME\.emacs.d;
@@ -23,37 +23,40 @@ jobs:
       - name: List all custom configurations
         run: |
           ls $HOME\.doom.d;
-      - name: configure ~/.emacs.d/bin/doom
+      - name: List HOME
         run: |
-          $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
-          $Env:Path += ";$HOME\.emacs.d\bin";
-          & doom install --no-env;
-      - name: List all modules
-        run: |
-          ls $HOME\.emacs.d\.local\straight\repos;
-      - name: Packaging all files
-        run: |
-          # packaging
-          cd $HOME;
-          tar czf doomemacs-dotfiles.tgz .emacs.d .doom.d;
-          # upload artifact
-          mkdir -p ${{ github.workspace }}\artifact
-          mv doomemacs-dotfiles.tgz ${{ github.workspace }}\artifact\;
-      - name: Upload doomemacs-dotfiles.tgz
-        uses: actions/upload-artifact@v3
-        with:
-          name: doomemacs-dotfiles
-          path: ./artifact/
-      - name: Create release
-        id: create_release
-        uses: ncipollo/release-action@main
-        with:
-          name: doomemacs-dotfiles
-          allowUpdates: true
-          prerelease: false
-          tag: 30.0.50
-        #  commit: 
-          replacesArtifacts: true
-          token: ${{ secrets.TOKEN }}
-          artifacts: ./artifact/doomemacs-dotfiles.tgz
+          ls ~;
+      # - name: configure ~/.emacs.d/bin/doom
+      #   run: |
+      #     $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
+      #     $Env:Path += ";$HOME\.emacs.d\bin";
+      #     & doom install --no-env;
+      # - name: List all modules
+      #   run: |
+      #     ls $HOME\.emacs.d\.local\straight\repos;
+      # - name: Packaging all files
+      #   run: |
+      #     # packaging
+      #     cd $HOME;
+      #     tar czf doomemacs-dotfiles.tgz .emacs.d .doom.d;
+      #     # upload artifact
+      #     mkdir -p ${{ github.workspace }}\artifact
+      #     mv doomemacs-dotfiles.tgz ${{ github.workspace }}\artifact\;
+      # - name: Upload doomemacs-dotfiles.tgz
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: doomemacs-dotfiles
+      #     path: ./artifact/
+      # - name: Create release
+      #   id: create_release
+      #   uses: ncipollo/release-action@main
+      #   with:
+      #     name: doomemacs-dotfiles
+      #     allowUpdates: true
+      #     prerelease: false
+      #     tag: 30.0.50
+      #   #  commit: 
+      #     replacesArtifacts: true
+      #     token: ${{ secrets.TOKEN }}
+      #     artifacts: ./artifact/doomemacs-dotfiles.tgz
       - run: echo "🍏 This job's status is ${{ job.status }}."
