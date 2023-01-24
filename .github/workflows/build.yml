@@ -19,12 +19,18 @@ jobs:
       - name: Clone my doom emacs configuration
         run: |
           git clone --depth 1 https://github.com/doomemacs/doomemacs.git $HOME\.emacs.d;
-          git clone https://github.com/MoozIiSP/doom-emacs-private.git $HOME\.doom.d;
+          git clone --depth 1 https://github.com/MoozIiSP/doom-emacs-private.git $HOME\.doom.d;
+      - name: List all custom configurations
+        run: |
+          ls $HOME\.doom.d;
       - name: configure ~/.emacs.d/bin/doom
         run: |
           $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
           $Env:Path += ";$HOME\.emacs.d\bin";
           & doom install --no-env;
+      - name: List all modules
+        run: |
+          ls $HOME\.emacs.d\.local\straight\repos;
       - name: Packaging all files
         run: |
           # packaging
