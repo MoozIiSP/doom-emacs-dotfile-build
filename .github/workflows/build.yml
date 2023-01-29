@@ -23,7 +23,7 @@ jobs:
       - name: Disable some features
         run: |
           cd $HOME
-          sudo sed -i 's/(emoji/;;(emoji/g' .doom.d\init.el
+          sed -i 's/(emoji/;;(emoji/g' .doom.d\init.el
       - name: configure ~/.emacs.d/bin/doom
         run: |
           $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
