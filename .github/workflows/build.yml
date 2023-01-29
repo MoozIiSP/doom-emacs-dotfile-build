@@ -22,7 +22,8 @@ jobs:
           git clone --depth 1 https://github.com/MoozIiSP/doom-emacs-private.git $HOME\.doom.d;
       - name: Disable some features
         run: |
-          sed -i 's/(emoji/;;(emoji/g' $HOME\.doom.d\init.el
+          cd $HOME
+          sudo sed -i 's/(emoji/;;(emoji/g' .doom.d\init.el
       - name: configure ~/.emacs.d/bin/doom
         run: |
           $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
