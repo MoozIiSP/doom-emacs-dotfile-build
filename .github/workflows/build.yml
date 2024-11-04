@@ -15,15 +15,13 @@ jobs:
 
       - name: Install 7-Zip using winget
         run: |
-          winget install -e --id 7zip.7zip
+          Start-Process winget -ArgumentList 'install', '-e', '--id', '7zip.7zip' -NoNewWindow -Wait
 
       - name: Download MSYS2
         run: |
           Invoke-WebRequest -Uri "https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-base-x86_64-latest.tar.xz" -OutFile "msys2-base.tar.xz"
           # 解压 MSYS2
-          7z x msys2-base.tar.xz -o C:\
-          cd C:\
-          dir
+          & 'C:\Program Files\7-Zip\7z.exe' x msys2-base.tar.xz -o C:\
 
       - name: Update MSYS2 base environment
         run: |
