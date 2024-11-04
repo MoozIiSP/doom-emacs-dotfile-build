@@ -28,7 +28,7 @@ jobs:
 
       - name: Update MSYS2 base environment
         run: |
-          "C:\msys64\usr\bin\bash.exe" -c "pacman -Syu"
+          & "C:\msys64\usr\bin\bash.exe" -c "pacman -Syu"
           Start-Sleep -Seconds 5  # Wait a bit for the terminal to settle
           "C:\msys64\usr\bin\bash.exe" -c "pacman -Su"
 
