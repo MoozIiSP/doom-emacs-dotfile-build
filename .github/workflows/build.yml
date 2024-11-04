@@ -1,61 +1,219 @@
-name: Emacs on windows dotfile building
-run-name: ${{ github.actor }} is build and packaging Emacs dotfiles 🚀
-on: [push]
+name: Build Emacs with MSYS2
+
+on:
+  push:
+    branches:
+      - main
 
 jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download MSYS2
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/msys2/msys2-installer/releases/latest/download/msys2-x86_64-20210725.exe" -OutFile "msys2.exe"
+          Start-Process -FilePath "msys2.exe" -ArgumentList "/S" -NoNewWindow -Wait
+
+      - name: Update MSYS2 base environment
+        run: |
+          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "pacman -Syu"
+          Start-Sleep -Seconds 5  # Wait a bit for the terminal to settle
+          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "pacman -Su"
+
+      - name: Install required packages
+        run: |
+          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "
+          pacman -Su \
+            autoconf \
+            autogen \
+            automake \
+            automake-wrapper \
+            git \
+            libidn-devel \
+            libltdl \
+            libnettle-devel \
+            libopenssl \
+            libp11-kit-devel \
+            libtasn1-devel \
+            libunistring \
+            make \
+            mingw-w64-ucrt-x86_64-toolchain \
+            mingw-w64-ucrt-x86_64-bzip2 \
+            mingw-w64-ucrt-x86_64-cairo \
+            mingw-w64-ucrt-x86_64-crt-git \
+            mingw-w64-ucrt-x86_64-expat \
+            mingw-w64-ucrt-x86_64-fontconfig \
+            mingw-w64-ucrt-x86_64-freetype \
+            mingw-w64-ucrt-x86_64-gcc \
+            mingw-w64-ucrt-x86_64-gcc-libs \
+            mingw-w64-ucrt-x86_64-gdk-pixbuf2 \
+            mingw-w64-ucrt-x86_64-gettext \
+            mingw-w64-ucrt-x86_64-giflib \
+            mingw-w64-ucrt-x86_64-glib2 \
+            mingw-w64-ucrt-x86_64-gmp \
+            mingw-w64-ucrt-x86_64-gnutls \
+            mingw-w64-ucrt-x86_64-harfbuzz \
+            mingw-w64-ucrt-x86_64-headers-git \
+            mingw-w64-ucrt-x86_64-imagemagick \
+            mingw-w64-ucrt-x86_64-jansson \
+            mingw-w64-ucrt-x86_64-libgccjit \
+            mingw-w64-ucrt-x86_64-libiconv \
+            mingw-w64-ucrt-x86_64-libidn2 \
+            mingw-w64-ucrt-x86_64-libjpeg-turbo \
+            mingw-w64-ucrt-x86_64-libpng \
+            mingw-w64-ucrt-x86_64-librsvg \
+            mingw-w64-ucrt-x86_64-sqlite3 \
+            mingw-w64-ucrt-x86_64-tree-sitter \
+            mingw-w64-ucrt-x86_64-libtiff \
+            mingw-w64-ucrt-x86_64-libunistring \
+            mingw-w64-ucrt-x86_64-libxml2 \
+            mingw-w64-ucrt-x86_64-nettle \
+            mingw-w64-ucrt-x86_64-p11-kit \
+            mingw-w64-ucrt-x86_64-winpthreads \
+            mingw-w64-ucrt-x86_64-xpm-nox \
+            mingw-w64-ucrt-x86_64-xz \
+            mingw-w64-ucrt-x86_64-zlib \
+            mingw-w64-ucrt-x86_64-jbigkit \
+            pkgconf \
+            texinfo
+          "
+
+      - name: Fetch Emacs source
+        run: |
+          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "
+          git config --global core.autocrlf false
+          git clone https://github.com/emacs-mirror/emacs --depth 1
+          "
+
+      - name: Build Emacs
+        run: |
+          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "
+          cd emacs
+          ./autogen.sh
+          mkdir build
+          cd build
+          target=/g/emacs
+          ../configure prefix=$target \
+              --with-native-compilation=aot \
+              --with-gnutls \
+              --without-dbus \
+              --without-pop \
+              --with-xpm \
+              --with-imagemagick \
+              --with-tree-sitter
+          make bootstrap
+          make install
+          "
+
+      - name: Copy necessary DLLs
+        run: |
+          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "
+          target=/g/emacs
+          mkdir -p $target/lib/gcc
+          cp /ucrt64/lib/{crtbegin,crtend,dllcrt2}.o $target/lib/gcc
+          cp /ucrt64/lib/lib{advapi32,gcc_s,mingw32,msvcrt,shell32,kernel32,mingwex,pthread,user32}.a $target/lib/gcc
+          cp /ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/libgcc.a $target/lib/gcc
+          cp /ucrt64/bin/{ld,as}.exe $target/lib/gcc
+          "
+
+      - name: Package Emacs
+        run: |
+          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "
+          target=/g/emacs
+          version=\$(git -C emacs describe --tags)
+          commit=\$(git -C emacs rev-parse --short HEAD)
+          zip -r emacs-\$version-\$commit.zip \$target/*
+          "
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: emacs-package
+          path: emacs-*.zip
+
   emacs-dotfile-build:
     runs-on: windows-latest
+    needs: build
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Download Emacs binary and uncompress it.
+
+      - name: Download Emacs binary from previous job
+        uses: actions/download-artifact@v2
+        with:
+          name: emacs-package
+
+      - name: Uncompress Emacs binary
         run: |
-          curl -LO https://github.com/kiennq/emacs-build/releases/download/v30.172.20230101.8aae5fb/emacs-master-x86_64-full.zip;
-          unzip emacs-master-x86_64-full.zip -d emacs-bin;
+          unzip emacs-*.zip -d emacs-bin
+
       - name: Fetch Emacs version
         run: |
-          $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
-          echo $(& emacs --version);
+          $Env:Path += ";${{ github.workspace }}\emacs-bin\bin"
+          echo $(& emacs --version)
+
       - name: Clone my doom emacs configuration
         run: |
-          git clone --depth 1 https://github.com/doomemacs/doomemacs.git $HOME\.emacs.d;
-          git clone --depth 1 https://github.com/MoozIiSP/doom-emacs-private.git $HOME\.doom.d;
+          git clone --depth 1 https://github.com/doomemacs/doomemacs.git $HOME\.emacs.d
+          git clone --depth 1 https://github.com/MoozIiSP/doom-emacs-private.git $HOME\.doom.d
+
       - name: Disable some features
         run: |
           cd $HOME
           sed -i 's/(emoji/;;(emoji/g' .doom.d\init.el
-      - name: configure ~/.emacs.d/bin/doom
+
+      - name: Configure ~/.emacs.d/bin/doom
         run: |
-          $Env:Path += ";${{ github.workspace }}\emacs-bin\bin";
-          $Env:Path += ";$HOME\.emacs.d\bin";
-          $Env:DOOMDIR = "$HOME\.doom.d\"
-          & doom install --force;
+          $Env:Path += ";${{ github.workspace }}\emacs-bin\bin"
+          $Env:Path += ";$HOME\.emacs.d\bin"
+          $Env:DOOMDIR = "$HOME\.doom.d"
+          & doom install --force
+
       - name: Download all-the-icons
         run: |
           svn export https://github.com/domtronn/all-the-icons.el/branches/master/fonts $HOME/.emacs.d/.local/share/fonts
+
       - name: Packaging all files
         run: |
-          # packaging
-          cd $HOME;
-          tar czf doomemacs-dotfiles.tgz .emacs.d .doom.d;
-          # upload artifact
+          cd $HOME
+          tar czf doomemacs-dotfiles.tgz .emacs.d .doom.d
           mkdir -p ${{ github.workspace }}\artifact
-          mv doomemacs-dotfiles.tgz ${{ github.workspace }}\artifact\;
+          mv doomemacs-dotfiles.tgz ${{ github.workspace }}\artifact\
+
       - name: Upload doomemacs-dotfiles.tgz
         uses: actions/upload-artifact@v3
         with:
           name: doomemacs-dotfiles
           path: ./artifact/
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs: [build, emacs-dotfile-build]
+    steps:
+      - name: Download Emacs package artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: emacs-package
+
+      - name: Download Doom Emacs dotfiles artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: doomemacs-dotfiles
+
       - name: Create release
         id: create_release
         uses: ncipollo/release-action@main
         with:
-          name: doomemacs-dotfiles
+          name: Release for Emacs and Doom Emacs
           allowUpdates: true
           prerelease: false
-          tag: 30.0.50
-        #  commit: 
+          tag: v1.0.0
           replacesArtifacts: true
           token: ${{ secrets.TOKEN }}
-          artifacts: ./artifact/doomemacs-dotfiles.tgz
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          artifacts: |
+            ./artifact/doomemacs-dotfiles.tgz
+            ./emacs-*.zip
