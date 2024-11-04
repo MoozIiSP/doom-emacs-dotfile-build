@@ -28,13 +28,13 @@ jobs:
 
       - name: Update MSYS2 base environment
         run: |
+          ls C:\msys64\ucrt64
           Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "pacman -Syu"' -NoNewWindow -Wait
           Start-Sleep -Seconds 5  # Wait a bit for the terminal to settle
           Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "pacman -Su"' -NoNewWindow -Wait
 
       - name: Install required packages
         run: |
-          ls C:\msys64
           Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
           pacman -Su \
             autoconf \
