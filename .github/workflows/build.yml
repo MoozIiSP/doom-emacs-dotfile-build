@@ -15,9 +15,9 @@ jobs:
 
       - name: Download MSYS2
         run: |
-          Invoke-WebRequest -Uri "https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-base-x86_64-latest.tar.zst" -OutFile "msys2-base.tar.zst"
+          Invoke-WebRequest -Uri "https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-base-x86_64-latest.tar.xz" -OutFile "msys2-base.tar.xz"
           # 解压 MSYS2
-          tar -I zstd -xf msys2-base.tar.zst -C C:\
+          tar -xf msys2-base.tar.xz -C C:\
 
       - name: Update MSYS2 base environment
         run: |
