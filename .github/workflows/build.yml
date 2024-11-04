@@ -29,13 +29,13 @@ jobs:
       - name: Update MSYS2 base environment
         run: |
           ls C:\msys64\ucrt64
-          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "pacman -Syu"' -NoNewWindow -Wait
+          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "pacman -Syu"' -NoNewWindow -Wait
           Start-Sleep -Seconds 5  # Wait a bit for the terminal to settle
-          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "pacman -Su"' -NoNewWindow -Wait
+          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "pacman -Su"' -NoNewWindow -Wait
 
       - name: Install required packages
         run: |
-          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
+          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "
           pacman -Su \
             autoconf \
             autogen \
@@ -93,14 +93,14 @@ jobs:
 
       - name: Fetch Emacs source
         run: |
-          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
+          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "
           git config --global core.autocrlf false
           git clone https://github.com/emacs-mirror/emacs --depth 1
           "' -NoNewWindow -Wait
 
       - name: Build Emacs
         run: |
-          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
+          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "
           cd emacs
           ./autogen.sh
           mkdir build
@@ -120,7 +120,7 @@ jobs:
 
       - name: Copy necessary DLLs
         run: |
-          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
+          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "
           target=/g/emacs
           mkdir -p $target/lib/gcc
           cp /ucrt64/lib/{crtbegin,crtend,dllcrt2}.o $target/lib/gcc
@@ -131,7 +131,7 @@ jobs:
 
       - name: Package Emacs
         run: |
-          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
+          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "
           target=/g/emacs
           version=\$(git -C emacs describe --tags)
           commit=\$(git -C emacs rev-parse --short HEAD)
