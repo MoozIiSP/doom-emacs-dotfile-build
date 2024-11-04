@@ -34,6 +34,7 @@ jobs:
 
       - name: Install required packages
         run: |
+          ls C:\msys64
           Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
           pacman -Su \
             autoconf \
