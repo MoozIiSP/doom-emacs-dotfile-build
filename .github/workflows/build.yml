@@ -28,11 +28,9 @@ jobs:
 
       - name: Update MSYS2 base environment
         run: |
-          cd C:\
-          dir
-          & "C:\msys64\usr\bin\bash.exe -c pacman -Syu"
+          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c pacman -Syu' -NoNewWindow -Wait
           Start-Sleep -Seconds 5  # Wait a bit for the terminal to settle
-          & "C:\msys64\usr\bin\bash.exe -c pacman -Su"
+          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c pacman -Su' -NoNewWindow -Wait
 
       - name: Install required packages
         run: |
