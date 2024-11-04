@@ -34,7 +34,7 @@ jobs:
 
       - name: Install required packages
         run: |
-          "C:\msys64\usr\bin\bash.exe" -c "
+          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
           pacman -Su \
             autoconf \
             autogen \
@@ -88,18 +88,18 @@ jobs:
             mingw-w64-ucrt-x86_64-jbigkit \
             pkgconf \
             texinfo
-          "
+          "' -NoNewWindow -Wait
 
       - name: Fetch Emacs source
         run: |
-          "C:\msys64\usr\bin\bash.exe" -c "
+          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
           git config --global core.autocrlf false
           git clone https://github.com/emacs-mirror/emacs --depth 1
-          "
+          "' -NoNewWindow -Wait
 
       - name: Build Emacs
         run: |
-          "C:\msys64\usr\bin\bash.exe" -c "
+          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
           cd emacs
           ./autogen.sh
           mkdir build
@@ -115,27 +115,27 @@ jobs:
               --with-tree-sitter
           make bootstrap
           make install
-          "
+          "' -NoNewWindow -Wait
 
       - name: Copy necessary DLLs
         run: |
-          "C:\msys64\usr\bin\bash.exe" -c "
+          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
           target=/g/emacs
           mkdir -p $target/lib/gcc
           cp /ucrt64/lib/{crtbegin,crtend,dllcrt2}.o $target/lib/gcc
           cp /ucrt64/lib/lib{advapi32,gcc_s,mingw32,msvcrt,shell32,kernel32,mingwex,pthread,user32}.a $target/lib/gcc
           cp /ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/libgcc.a $target/lib/gcc
           cp /ucrt64/bin/{ld,as}.exe $target/lib/gcc
-          "
+          "' -NoNewWindow -Wait
 
       - name: Package Emacs
         run: |
-          "C:\msys64\usr\bin\bash.exe" -c "
+          Start-Process "C:\msys64\usr\bin\bash.exe" -ArgumentList '-c "
           target=/g/emacs
           version=\$(git -C emacs describe --tags)
           commit=\$(git -C emacs rev-parse --short HEAD)
           zip -r emacs-\$version-\$commit.zip \$target/*
-          "
+          "' -NoNewWindow -Wait
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
