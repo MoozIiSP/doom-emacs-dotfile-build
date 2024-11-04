@@ -15,18 +15,19 @@ jobs:
 
       - name: Download MSYS2
         run: |
-          Invoke-WebRequest -Uri "https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-x86_64-latest.exe" -OutFile "msys2.exe"
-          Start-Process -FilePath "msys2.exe" -ArgumentList "/S" -NoNewWindow -Wait
+          Invoke-WebRequest -Uri "https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-base-x86_64-latest.tar.zst" -OutFile "msys2-base.tar.zst"
+          # 解压 MSYS2
+          tar -I zstd -xf msys2-base.tar.zst -C C:\
 
       - name: Update MSYS2 base environment
         run: |
-          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "pacman -Syu"
+          "C:\msys64\usr\bin\bash.exe" -c "pacman -Syu"
           Start-Sleep -Seconds 5  # Wait a bit for the terminal to settle
-          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "pacman -Su"
+          "C:\msys64\usr\bin\bash.exe" -c "pacman -Su"
 
       - name: Install required packages
         run: |
-          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "
+          "C:\msys64\usr\bin\bash.exe" -c "
           pacman -Su \
             autoconf \
             autogen \
@@ -84,14 +85,14 @@ jobs:
 
       - name: Fetch Emacs source
         run: |
-          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "
+          "C:\msys64\usr\bin\bash.exe" -c "
           git config --global core.autocrlf false
           git clone https://github.com/emacs-mirror/emacs --depth 1
           "
 
       - name: Build Emacs
         run: |
-          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "
+          "C:\msys64\usr\bin\bash.exe" -c "
           cd emacs
           ./autogen.sh
           mkdir build
@@ -111,7 +112,7 @@ jobs:
 
       - name: Copy necessary DLLs
         run: |
-          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "
+          "C:\msys64\usr\bin\bash.exe" -c "
           target=/g/emacs
           mkdir -p $target/lib/gcc
           cp /ucrt64/lib/{crtbegin,crtend,dllcrt2}.o $target/lib/gcc
@@ -122,7 +123,7 @@ jobs:
 
       - name: Package Emacs
         run: |
-          "C:\Program Files\MSYS2\usr\bin\bash.exe" -c "
+          "C:\msys64\usr\bin\bash.exe" -c "
           target=/g/emacs
           version=\$(git -C emacs describe --tags)
           commit=\$(git -C emacs rev-parse --short HEAD)
