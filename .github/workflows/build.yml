@@ -13,15 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install 7-Zip using winget
+      - name: Install Chocolatey
         run: |
-          Start-Process winget -ArgumentList 'install', '-e', '--id', '7zip.7zip' -NoNewWindow -Wait
+          Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+      - name: Install 7-Zip using Chocolatey
+        run: choco install 7zip -y
 
       - name: Download MSYS2
         run: |
           Invoke-WebRequest -Uri "https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-base-x86_64-latest.tar.xz" -OutFile "msys2-base.tar.xz"
           # 解压 MSYS2
-          & 'C:\Program Files\7-Zip\7z.exe' x msys2-base.tar.xz -o C:\
+          & 'C:\ProgramData\chocolatey\lib\7zip\tools\7z.exe' x msys2-base.tar.xz -o C:\
 
       - name: Update MSYS2 base environment
         run: |
