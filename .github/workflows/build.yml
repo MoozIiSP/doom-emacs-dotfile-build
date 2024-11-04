@@ -22,7 +22,7 @@ jobs:
 
       - name: Download MSYS2
         run: |
-          Invoke-WebRequest -Uri "https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-base-x86_64-latest.tar.zstd" -OutFile "msys2-base.tar.xz"
+          Invoke-WebRequest -Uri "https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-base-x86_64-latest.tar.zst" -OutFile "msys2-base.tar.zst"
           zstd -d msys2-base.tar.zst -o msys2-base.tar
           tar -xf msys2-base.tar -C C:\
 
