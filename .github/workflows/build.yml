@@ -75,7 +75,7 @@ jobs:
 
       - name: Set up ucrt64 environment
         run: |
-          echo "::add-path::C:\msys64\ucrt64\bin"
+          echo "C:\\msys64\\ucrt64\\bin" >> $GITHUB_PATH
 
       - name: Fetch Emacs source
         shell: msys2 {0}
