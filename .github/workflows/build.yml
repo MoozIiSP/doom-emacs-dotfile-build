@@ -78,11 +78,15 @@ jobs:
         run: |
           echo "C:\\msys64\\ucrt64\\bin" >> $GITHUB_PATH
 
-      - name: Fetch Emacs source
-        shell: msys2 {0}
+      - name: Clone Emacs repository and get version info
         run: |
           git config --global core.autocrlf false
           git clone https://github.com/emacs-mirror/emacs --depth 1
+          cd emacs
+          version=$(git describe --tags)
+          commit=$(git rev-parse --short HEAD)
+          echo "VERSION=$version" >> $GITHUB_ENV
+          echo "COMMIT=$commit" >> $GITHUB_ENV
 
       - name: Build Emacs
         shell: msys2 {0}
@@ -116,12 +120,6 @@ jobs:
       - name: Package Emacs
         shell: msys2 {0}
         run: |
-          dir
-          dir /emacs
-          target=/emacs
-          cd emacs
-          version=$(git -C emacs describe --tags)
-          commit=$(git -C emacs rev-parse --short HEAD)
           zip -r ../emacs-$version-$commit.zip $target/*
 
       - name: Upload Artifacts
