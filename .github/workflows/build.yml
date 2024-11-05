@@ -16,6 +16,7 @@ jobs:
       - name: Set up MSYS2
         uses: msys2/setup-msys2@v2
         with:
+          msystem: UCRT64
           update: true
           path-type: inherit
           install: > 
@@ -78,7 +79,7 @@ jobs:
           echo "C:\\msys64\\ucrt64\\bin" >> $GITHUB_PATH
 
       - name: Fetch Emacs source
-        shell: msys2 {0}
+        shell: uart64 {0}  
         run: |
           git config --global core.autocrlf false
           git clone https://github.com/emacs-mirror/emacs --depth 1
