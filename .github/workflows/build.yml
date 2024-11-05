@@ -13,130 +13,112 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Chocolatey
-        run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-
-      - name: Install Zstandard using Chocolatey
-        run: choco install zstandard -y
-
-      - name: Download MSYS2
-        run: |
-          Invoke-WebRequest -Uri "https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-base-x86_64-latest.tar.zst" -OutFile "msys2-base.tar.zst"
-          zstd -d msys2-base.tar.zst -o msys2-base.tar
-          tar -xf msys2-base.tar -C C:\
-
-      - name: Update MSYS2 base environment
-        run: |
-          ls C:\msys64\ucrt64
-          Start-Process "C:\msys64\ucrt64\bin\bash.exe" -ArgumentList '-c "pacman -Syu"' -NoNewWindow -Wait
-          Start-Sleep -Seconds 5  # Wait a bit for the terminal to settle
-          Start-Process "C:\msys64\ucrt64\bin\bash.exe" -ArgumentList '-c "pacman -Su"' -NoNewWindow -Wait
-
-      - name: Install required packages
-        run: |
-          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "
-          pacman -Su \
-            autoconf \
-            autogen \
-            automake \
-            automake-wrapper \
-            git \
-            libidn-devel \
-            libltdl \
-            libnettle-devel \
-            libopenssl \
-            libp11-kit-devel \
-            libtasn1-devel \
-            libunistring \
-            make \
-            mingw-w64-ucrt-x86_64-toolchain \
-            mingw-w64-ucrt-x86_64-bzip2 \
-            mingw-w64-ucrt-x86_64-cairo \
-            mingw-w64-ucrt-x86_64-crt-git \
-            mingw-w64-ucrt-x86_64-expat \
-            mingw-w64-ucrt-x86_64-fontconfig \
-            mingw-w64-ucrt-x86_64-freetype \
-            mingw-w64-ucrt-x86_64-gcc \
-            mingw-w64-ucrt-x86_64-gcc-libs \
-            mingw-w64-ucrt-x86_64-gdk-pixbuf2 \
-            mingw-w64-ucrt-x86_64-gettext \
-            mingw-w64-ucrt-x86_64-giflib \
-            mingw-w64-ucrt-x86_64-glib2 \
-            mingw-w64-ucrt-x86_64-gmp \
-            mingw-w64-ucrt-x86_64-gnutls \
-            mingw-w64-ucrt-x86_64-harfbuzz \
-            mingw-w64-ucrt-x86_64-headers-git \
-            mingw-w64-ucrt-x86_64-imagemagick \
-            mingw-w64-ucrt-x86_64-jansson \
-            mingw-w64-ucrt-x86_64-libgccjit \
-            mingw-w64-ucrt-x86_64-libiconv \
-            mingw-w64-ucrt-x86_64-libidn2 \
-            mingw-w64-ucrt-x86_64-libjpeg-turbo \
-            mingw-w64-ucrt-x86_64-libpng \
-            mingw-w64-ucrt-x86_64-librsvg \
-            mingw-w64-ucrt-x86_64-sqlite3 \
-            mingw-w64-ucrt-x86_64-tree-sitter \
-            mingw-w64-ucrt-x86_64-libtiff \
-            mingw-w64-ucrt-x86_64-libunistring \
-            mingw-w64-ucrt-x86_64-libxml2 \
-            mingw-w64-ucrt-x86_64-nettle \
-            mingw-w64-ucrt-x86_64-p11-kit \
-            mingw-w64-ucrt-x86_64-winpthreads \
-            mingw-w64-ucrt-x86_64-xpm-nox \
-            mingw-w64-ucrt-x86_64-xz \
-            mingw-w64-ucrt-x86_64-zlib \
-            mingw-w64-ucrt-x86_64-jbigkit \
-            pkgconf \
+      - name: Set up MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          path-type: inherit
+          install: > 
+            base-devel
+            autoconf
+            autogen
+            automake
+            automake-wrapper
+            git
+            libidn-devel
+            libltdl
+            libnettle-devel
+            libopenssl
+            libp11-kit-devel
+            libtasn1-devel
+            libunistring
+            make
+            mingw-w64-ucrt-x86_64-toolchain
+            mingw-w64-ucrt-x86_64-bzip2
+            mingw-w64-ucrt-x86_64-cairo
+            mingw-w64-ucrt-x86_64-crt-git
+            mingw-w64-ucrt-x86_64-expat
+            mingw-w64-ucrt-x86_64-fontconfig
+            mingw-w64-ucrt-x86_64-freetype
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-gcc-libs
+            mingw-w64-ucrt-x86_64-gdk-pixbuf2
+            mingw-w64-ucrt-x86_64-gettext
+            mingw-w64-ucrt-x86_64-giflib
+            mingw-w64-ucrt-x86_64-glib2
+            mingw-w64-ucrt-x86_64-gmp
+            mingw-w64-ucrt-x86_64-gnutls
+            mingw-w64-ucrt-x86_64-harfbuzz
+            mingw-w64-ucrt-x86_64-headers-git
+            mingw-w64-ucrt-x86_64-imagemagick
+            mingw-w64-ucrt-x86_64-jansson
+            mingw-w64-ucrt-x86_64-libgccjit
+            mingw-w64-ucrt-x86_64-libiconv
+            mingw-w64-ucrt-x86_64-libidn2
+            mingw-w64-ucrt-x86_64-libjpeg-turbo
+            mingw-w64-ucrt-x86_64-libpng
+            mingw-w64-ucrt-x86_64-librsvg
+            mingw-w64-ucrt-x86_64-sqlite3
+            mingw-w64-ucrt-x86_64-tree-sitter
+            mingw-w64-ucrt-x86_64-libtiff
+            mingw-w64-ucrt-x86_64-libunistring
+            mingw-w64-ucrt-x86_64-libxml2
+            mingw-w64-ucrt-x86_64-nettle
+            mingw-w64-ucrt-x86_64-p11-kit
+            mingw-w64-ucrt-x86_64-winpthreads
+            mingw-w64-ucrt-x86_64-xpm-nox
+            mingw-w64-ucrt-x86_64-xz
+            mingw-w64-ucrt-x86_64-zlib
+            mingw-w64-ucrt-x86_64-jbigkit
+            pkgconf
             texinfo
-          "' -NoNewWindow -Wait
+
+      - name: Set up ucrt64 environment
+        run: |
+          echo "::add-path::C:\msys64\ucrt64\bin"
 
       - name: Fetch Emacs source
+        shell: msys2 {0}
         run: |
-          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "
           git config --global core.autocrlf false
           git clone https://github.com/emacs-mirror/emacs --depth 1
-          "' -NoNewWindow -Wait
 
       - name: Build Emacs
+        shell: msys2 {0}
         run: |
-          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "
           cd emacs
           ./autogen.sh
           mkdir build
           cd build
           target=/g/emacs
-          ../configure prefix=$target \
-              --with-native-compilation=aot \
-              --with-gnutls \
-              --without-dbus \
-              --without-pop \
-              --with-xpm \
-              --with-imagemagick \
+          ../configure prefix=$target
+              --with-native-compilation=aot
+              --with-gnutls
+              --without-dbus
+              --without-pop
+              --with-xpm
+              --with-imagemagick
               --with-tree-sitter
           make bootstrap
           make install
-          "' -NoNewWindow -Wait
 
       - name: Copy necessary DLLs
+        shell: msys2 {0}
         run: |
-          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "
           target=/g/emacs
           mkdir -p $target/lib/gcc
           cp /ucrt64/lib/{crtbegin,crtend,dllcrt2}.o $target/lib/gcc
           cp /ucrt64/lib/lib{advapi32,gcc_s,mingw32,msvcrt,shell32,kernel32,mingwex,pthread,user32}.a $target/lib/gcc
           cp /ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/libgcc.a $target/lib/gcc
           cp /ucrt64/bin/{ld,as}.exe $target/lib/gcc
-          "' -NoNewWindow -Wait
 
       - name: Package Emacs
+        shell: msys2 {0}
         run: |
-          Start-Process "C:\msys64\ucrt64\usr\bin\bash.exe" -ArgumentList '-c "
           target=/g/emacs
           version=\$(git -C emacs describe --tags)
           commit=\$(git -C emacs rev-parse --short HEAD)
-          zip -r emacs-\$version-\$commit.zip \$target/*
-          "' -NoNewWindow -Wait
+          zip -r emacs-\$version-\$commit.zip$target/*
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
