@@ -86,6 +86,7 @@ jobs:
       - name: Build Emacs
         shell: msys2 {0}
         run: |
+          source /ucrt64/etc/profile
           cd emacs
           ./autogen.sh
           mkdir build
