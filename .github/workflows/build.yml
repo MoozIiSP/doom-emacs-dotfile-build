@@ -116,10 +116,13 @@ jobs:
       - name: Package Emacs
         shell: msys2 {0}
         run: |
+          dir
+          dir /emacs
           target=/emacs
+          cd emacs
           version=$(git -C emacs describe --tags)
           commit=$(git -C emacs rev-parse --short HEAD)
-          zip -r emacs-$version-$commit.zip $target/*
+          zip -r ../emacs-$version-$commit.zip $target/*
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
