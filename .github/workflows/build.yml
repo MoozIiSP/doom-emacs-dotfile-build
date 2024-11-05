@@ -93,7 +93,8 @@ jobs:
           ./autogen.sh
           mkdir build
           cd build
-          target=/build/emacs
+          pwd
+          target=/mnt/c/build/emacs
           ../configure prefix=$target \
               --with-native-compilation=aot \
               --with-gnutls \
@@ -108,13 +109,13 @@ jobs:
       - name: Verify Emacs installation
         shell: msys2 {0}
         run: |
-          target=/build/emacs
+          target=/mnt/c/build/emacs
           ls -l $target
 
       - name: Package Emacs
         shell: msys2 {0}
         run: |
-          target=/build/emacs
+          target=/mnt/c/build/emacs
           tar -czf ../emacs-$version-$commit.tar.gz -C $target .
 
       - name: Upload Artifacts
