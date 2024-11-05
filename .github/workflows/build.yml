@@ -73,6 +73,7 @@ jobs:
             mingw-w64-ucrt-x86_64-jbigkit
             pkgconf
             texinfo
+            zip
 
       - name: Clone Emacs repository and get version info
         shell: msys2 {0}
