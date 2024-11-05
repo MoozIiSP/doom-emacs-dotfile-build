@@ -92,13 +92,13 @@ jobs:
           mkdir build
           cd build
           target=/g/emacs
-          ../configure prefix=$target
-              --with-native-compilation=aot
-              --with-gnutls
-              --without-dbus
-              --without-pop
-              --with-xpm
-              --with-imagemagick
+          ../configure prefix=$target \
+              --with-native-compilation=aot \
+              --with-gnutls \
+              --without-dbus \
+              --without-pop \
+              --with-xpm \
+              --with-imagemagick \
               --with-tree-sitter
           make bootstrap
           make install
