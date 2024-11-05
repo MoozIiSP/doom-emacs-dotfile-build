@@ -80,8 +80,8 @@ jobs:
           git config --global core.autocrlf false
           git clone https://github.com/emacs-mirror/emacs --depth 1
           cd emacs
-          version=$(git describe --tags)
-          commit=$(git rev-parse --short HEAD)
+          version=$(grep AC_INIT configure.ac | awk -F',' '{ gsub("[ \\[\\]]","",$2); print $2 }')
+          commit=$(git rev-parse HEAD)
           echo "VERSION=$version" >> $GITHUB_ENV
           echo "COMMIT=$commit" >> $GITHUB_ENV
 
