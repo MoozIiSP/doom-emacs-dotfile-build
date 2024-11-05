@@ -91,7 +91,7 @@ jobs:
           ./autogen.sh
           mkdir build
           cd build
-          target=/g/emacs
+          target=/emacs
           ../configure prefix=$target \
               --with-native-compilation=aot \
               --with-gnutls \
@@ -106,7 +106,7 @@ jobs:
       - name: Copy necessary DLLs
         shell: msys2 {0}
         run: |
-          target=/g/emacs
+          target=/emacs
           mkdir -p $target/lib/gcc
           cp /ucrt64/lib/{crtbegin,crtend,dllcrt2}.o $target/lib/gcc
           cp /ucrt64/lib/lib{advapi32,gcc_s,mingw32,msvcrt,shell32,kernel32,mingwex,pthread,user32}.a $target/lib/gcc
@@ -116,7 +116,7 @@ jobs:
       - name: Package Emacs
         shell: msys2 {0}
         run: |
-          target=/g/emacs
+          target=/emacs
           version=\$(git -C emacs describe --tags)
           commit=\$(git -C emacs rev-parse --short HEAD)
           zip -r emacs-\$version-\$commit.zip$target/*
