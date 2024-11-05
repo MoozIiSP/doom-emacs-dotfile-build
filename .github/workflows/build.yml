@@ -79,7 +79,7 @@ jobs:
           echo "C:\\msys64\\ucrt64\\bin" >> $GITHUB_PATH
 
       - name: Fetch Emacs source
-        shell: uart64 {0}  
+        shell: msys2 {0}
         run: |
           git config --global core.autocrlf false
           git clone https://github.com/emacs-mirror/emacs --depth 1
