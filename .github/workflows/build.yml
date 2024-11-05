@@ -72,8 +72,8 @@ jobs:
             mingw-w64-ucrt-x86_64-zlib
             mingw-w64-ucrt-x86_64-jbigkit
             pkgconf
+            tar
             texinfo
-            zip
 
       - name: Clone Emacs repository and get version info
         shell: msys2 {0}
@@ -85,7 +85,7 @@ jobs:
           commit=$(git rev-parse HEAD)
           echo "VERSION=$version" >> $GITHUB_ENV
           echo "COMMIT=$commit" >> $GITHUB_ENV
-
+          
       - name: Build Emacs
         shell: msys2 {0}
         run: |
@@ -93,7 +93,7 @@ jobs:
           ./autogen.sh
           mkdir build
           cd build
-          target=/emacs
+          target=/build/emacs
           ../configure prefix=$target \
               --with-native-compilation=aot \
               --with-gnutls \
@@ -105,26 +105,23 @@ jobs:
           make bootstrap
           make install
 
-      - name: Copy necessary DLLs
+      - name: Verify Emacs installation
         shell: msys2 {0}
         run: |
-          target=/emacs
-          mkdir -p $target/lib/gcc
-          cp /ucrt64/lib/{crtbegin,crtend,dllcrt2}.o $target/lib/gcc
-          cp /ucrt64/lib/lib{advapi32,gcc_s,mingw32,msvcrt,shell32,kernel32,mingwex,pthread,user32}.a $target/lib/gcc
-          cp /ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/libgcc.a $target/lib/gcc
-          cp /ucrt64/bin/{ld,as}.exe $target/lib/gcc
+          target=/build/emacs
+          ls -l $target
 
       - name: Package Emacs
         shell: msys2 {0}
         run: |
-          zip -r ../emacs-$version-$commit.zip $target/*
+          target=/build/emacs
+          tar -czf ../emacs-$version-$commit.tar.gz -C $target .
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: emacs-package
-          path: emacs-*.zip
+          path: emacs-*.tar.gz
 
   emacs-dotfile-build:
     runs-on: windows-latest
