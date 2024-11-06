@@ -116,13 +116,14 @@ jobs:
         shell: msys2 {0}
         run: |
           target=/mnt/c/build/emacs
-          tar -czf ${{ github.workspace }}/emacs-$version-$commit.tar.gz -C $target .
+          mkdir -p /mnt/c/pkgs
+          tar -czf /mnt/c/pkgs/emacs-$version-$commit.tar.gz -C $target .
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: emacs-package
-          path: ${{ github.workspace }}/emacs-*.tar.gz
+          path: /mnt/c/pkgs/emacs-*.tar.gz
 
   emacs-dotfile-build:
     runs-on: windows-latest
