@@ -125,7 +125,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: emacs-package
-          path: /mnt/c/pkgs/emacs-*.tar.gz
+          path: /mnt/c/pkgs/emacs-$VERSION-$COMMIT.tar.gz
 
   emacs-dotfile-build:
     runs-on: windows-latest
