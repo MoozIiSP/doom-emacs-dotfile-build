@@ -112,7 +112,7 @@ jobs:
 
       - name: Package Emacs
         run: |
-          target=build/emacs
+          target=$(cygpath -u "${{ github.workspace }}\build\emacs")
           mkdir -p pkgs
           tar -czf pkgs/emacs-$VERSION-$COMMIT.tar.gz $target
           mkdir artifact
