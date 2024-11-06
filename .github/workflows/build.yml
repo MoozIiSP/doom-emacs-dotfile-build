@@ -111,6 +111,7 @@ jobs:
           ls -l
 
       - name: Package Emacs
+        shell: msys2 {0}
         run: |
           target=$(cygpath -u "${{ github.workspace }}\build\emacs")
           mkdir -p pkgs
