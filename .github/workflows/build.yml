@@ -93,8 +93,7 @@ jobs:
           ./autogen.sh
           mkdir build
           cd build
-          pwd
-          target=/mnt/c/build/emacs
+          target=build/emacs
           ../configure prefix=$target \
               --with-native-compilation=aot \
               --with-gnutls \
@@ -109,23 +108,21 @@ jobs:
       - name: Verify Emacs installation
         shell: msys2 {0}
         run: |
-          target=/mnt/c/build/emacs
-          ls -l $target
+          ls -l
 
       - name: Package Emacs
-        shell: msys2 {0}
         run: |
-          target=/mnt/c/build/emacs
-          mkdir -p /mnt/c/pkgs
-          ls -l $target
-          tar -czf /mnt/c/pkgs/emacs-$VERSION-$COMMIT.tar.gz $target
-          ls -l /mnt/c/pkgs
+          target=build/emacs
+          mkdir -p pkgs
+          tar -czf pkgs/emacs-$VERSION-$COMMIT.tar.gz $target
+          mkdir artifact
+          cp pkgs/emacs-$VERSION-$COMMIT.tar.gz artifact/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: emacs-package
-          path: /mnt/c/pkgs/emacs-$VERSION-$COMMIT.tar.gz
+          path: ./artifact/
 
   emacs-dotfile-build:
     runs-on: windows-latest
