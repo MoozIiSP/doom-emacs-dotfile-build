@@ -93,7 +93,7 @@ jobs:
           ./autogen.sh
           mkdir build
           cd build
-          target=build/emacs
+          target=$(cygpath -u "${{ github.workspace }}\build\emacs")
           ../configure prefix=$target \
               --with-native-compilation=aot \
               --with-gnutls \
