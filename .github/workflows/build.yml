@@ -117,7 +117,8 @@ jobs:
         run: |
           target=/mnt/c/build/emacs
           mkdir -p /mnt/c/pkgs
-          tar -czf /mnt/c/pkgs/emacs-$version-$commit.tar.gz -C $target .
+          ls -l $target
+          tar -czf /mnt/c/pkgs/emacs-$VERSION-$COMMIT.tar.gz $target
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
