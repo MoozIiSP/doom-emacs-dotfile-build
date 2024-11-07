@@ -115,9 +115,9 @@ jobs:
         run: |
           target=$(cygpath -u "${{ github.workspace }}\build\emacs")
           mkdir -p pkgs
-          tar -czf pkgs/emacs-$VERSION-$COMMIT.tar.gz $target
+          zip -r pkgs/emacs-$VERSION-$COMMIT.zip $target
           mkdir artifact
-          cp pkgs/emacs-$VERSION-$COMMIT.tar.gz artifact/
+          cp pkgs/emacs-$VERSION-$COMMIT.zip artifact/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
