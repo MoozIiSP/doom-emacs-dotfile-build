@@ -140,6 +140,8 @@ jobs:
       - name: Uncompress Emacs binary
         run: |
           unzip emacs-*.zip -d emacs-bin
+          ls -la
+          ls -la *
 
       - name: Fetch Emacs version
         run: |
