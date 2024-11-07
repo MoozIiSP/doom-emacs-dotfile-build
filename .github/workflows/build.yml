@@ -113,9 +113,10 @@ jobs:
       - name: Package Emacs
         shell: msys2 {0}
         run: |
-          target=$(cygpath -u "${{ github.workspace }}\build\emacs")
-          mkdir -p pkgs
-          zip -r pkgs/emacs-$VERSION-$COMMIT.zip $target
+          cd $(cygpath -u "${{ github.workspace }}\build\emacs")
+          mkdir -p $(cygpath -u "${{ github.workspace }}\pkgs")
+          zip -r ../../pkgs/emacs-$VERSION-$COMMIT.zip *
+          cd $(cygpath -u "${{ github.workspace }}")
           mkdir artifact
           cp pkgs/emacs-$VERSION-$COMMIT.zip artifact/
 
