@@ -72,7 +72,7 @@ jobs:
             mingw-w64-ucrt-x86_64-zlib
             mingw-w64-ucrt-x86_64-jbigkit
             pkgconf
-            tar
+            zip
             texinfo
 
       - name: Clone Emacs repository and get version info
