@@ -163,7 +163,8 @@ jobs:
 
       - name: Download all-the-icons
         run: |
-          svn export https://github.com/domtronn/all-the-icons.el/branches/master/fonts $HOME/.emacs.d/.local/share/fonts
+          git clone https://github.com/domtronn/all-the-icons.el/branches/master/fonts 
+          cp -r all-the-icons.el/fonts/* $HOME/.emacs.d/.local/share/fonts
 
       - name: Packaging all files
         run: |
