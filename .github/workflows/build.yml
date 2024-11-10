@@ -126,6 +126,19 @@ jobs:
           name: emacs-package
           path: ./artifact/
 
+      - name: Create release
+        id: create_release
+        uses: ncipollo/release-action@main
+        with:
+          name: Release for Emacs and Doom Emacs
+          allowUpdates: true
+          prerelease: false
+          tag: v1.0.0
+          replacesArtifacts: true
+          token: ${{ secrets.TOKEN }}
+          artifacts: |
+            ./emacs-$VERSION-$COMMIT.zip
+
   emacs-dotfile-build:
     runs-on: windows-latest
     needs: build
@@ -179,21 +192,7 @@ jobs:
         with:
           name: doomemacs-dotfiles
           path: ./artifact/
-
-  create-release:
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:
-      - name: Download Emacs package artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: emacs-package
-
-      - name: Download Doom Emacs dotfiles artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: doomemacs-dotfiles
-
+          
       - name: Create release
         id: create_release
         uses: ncipollo/release-action@main
@@ -205,5 +204,4 @@ jobs:
           replacesArtifacts: true
           token: ${{ secrets.TOKEN }}
           artifacts: |
-            ./artifact/doomemacs-dotfiles.tgz
-            ./emacs-*.zip
+            ./doomemacs-dotfiles.tgz
