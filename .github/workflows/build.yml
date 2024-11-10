@@ -164,6 +164,7 @@ jobs:
       - name: Download all-the-icons
         run: |
           git clone https://github.com/domtronn/all-the-icons.el
+          mkdir -p $HOME/.emacs.d/.local/share/fonts
           cp -r all-the-icons.el/fonts/* $HOME/.emacs.d/.local/share/fonts
 
       - name: Packaging all files
@@ -184,12 +185,12 @@ jobs:
     needs: [build]
     steps:
       - name: Download Emacs package artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: emacs-package
 
       - name: Download Doom Emacs dotfiles artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: doomemacs-dotfiles
 
