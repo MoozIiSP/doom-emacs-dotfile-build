@@ -115,7 +115,7 @@ jobs:
         run: |
           cd $(cygpath -u "${{ github.workspace }}\build\emacs")
           mkdir -p $(cygpath -u "${{ github.workspace }}\pkgs")
-          zip -r ../../pkgs/emacs-$VERSION-$COMMIT.zip *
+          zip -r ../../pkgs/emacs.zip *
           cd $(cygpath -u "${{ github.workspace }}")
           mkdir artifact
           cp pkgs/emacs.zip artifact/
