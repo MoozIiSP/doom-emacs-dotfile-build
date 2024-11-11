@@ -118,7 +118,7 @@ jobs:
           zip -r ../../pkgs/emacs-$VERSION-$COMMIT.zip *
           cd $(cygpath -u "${{ github.workspace }}")
           mkdir artifact
-          cp pkgs/emacs-$VERSION-$COMMIT.zip artifact/
+          cp pkgs/emacs.zip artifact/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
@@ -137,7 +137,7 @@ jobs:
           replacesArtifacts: true
           token: ${{ secrets.TOKEN }}
           artifacts: |
-            ./emacs-$VERSION-$COMMIT.zip
+            ./emacs.zip
 
   emacs-dotfile-build:
     runs-on: windows-latest
