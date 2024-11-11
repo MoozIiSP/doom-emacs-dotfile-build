@@ -204,4 +204,4 @@ jobs:
           replacesArtifacts: true
           token: ${{ secrets.TOKEN }}
           artifacts: |
-            ./doomemacs-dotfiles.tgz
+            ${{ github.workspace }}/artifact/*
