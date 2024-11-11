@@ -101,7 +101,7 @@ jobs:
               --without-pop \
               --with-xpm \
               --with-imagemagick \
-              --with-tree-sitter
+              --with-tree-sitter=ifavailable
           make bootstrap
           make install
 
