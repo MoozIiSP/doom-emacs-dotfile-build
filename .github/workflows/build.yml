@@ -137,7 +137,7 @@ jobs:
           replacesArtifacts: true
           token: ${{ secrets.TOKEN }}
           artifacts: |
-            ./artifacts/emacs.zip
+            {{ github.workspace }}/artifact/*
 
   emacs-dotfile-build:
     runs-on: windows-latest
